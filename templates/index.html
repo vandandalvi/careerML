@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tech Career Recommender</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global Styles */
+        :root {
+            --primary-dark: #0a192f;
+            --primary: #112240;
+            --primary-light: #1e3a8a;
+            --accent: #64ffda;
+            --text-primary: #e6f1ff;
+            --text-secondary: #a8b2d1;
+            --shadow: rgba(2, 12, 27, 0.7);
+            --gradient-start: #020c1b;
+            --gradient-end: #0a192f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background-color: var(--primary);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent), #4d8cff);
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, var(--accent), #4d8cff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: inline-block;
+        }
+
+        .header p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 10%;
+            background: linear-gradient(90deg, var(--accent), #4d8cff);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        /* Questions */
+        .question {
+            margin-bottom: 30px;
+            padding: 25px;
+            background-color: var(--primary-dark);
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .question:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .question h3 {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            color: var(--text-primary);
+        }
+
+        .question h3 i {
+            margin-right: 12px;
+            color: var(--accent);
+            font-size: 1.5rem;
+        }
+
+        /* Radio buttons */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-label {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 12px 15px;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 6px;
+            background-color: rgba(30, 58, 138, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .radio-label:hover {
+            background-color: var(--primary-light);
+        }
+
+        .radio-input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .radio-custom {
+            position: relative;
+            height: 22px;
+            width: 22px;
+            background-color: transparent;
+            border: 2px solid var(--text-secondary);
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .radio-custom::after {
+            content: "";
+            position: absolute;
+            display: none;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--accent);
+        }
+
+        .radio-input:checked~.radio-custom {
+            border-color: var(--accent);
+        }
+
+        .radio-input:checked~.radio-custom::after {
+            display: block;
+        }
+
+        .radio-input:checked~.radio-label {
+            color: var(--accent);
+            font-weight: 500;
+            background-color: rgba(100, 255, 218, 0.1);
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 16px;
+            margin-top: 20px;
+            background: linear-gradient(90deg, var(--accent), #4d8cff);
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(100, 255, 218, 0.2);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(100, 255, 218, 0.3);
+        }
+
+        .submit-btn:active {
+            transform: translateY(1px);
+        }
+
+        .submit-btn span {
+            margin-right: 10px;
+        }
+
+        .submit-btn i {
+            font-size: 1rem;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .question {
+                padding: 20px;
+            }
+
+            .question h3 {
+                font-size: 1.1rem;
+            }
+
+            .radio-label {
+                padding: 10px;
+            }
+        }
+
+        /* Animation for questions */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .question {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .question:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .question:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .question:nth-child(3) {
+            animation-delay: 0.3s;
+        }
+
+        .question:nth-child(4) {
+            animation-delay: 0.4s;
+        }
+
+        .question:nth-child(5) {
+            animation-delay: 0.5s;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Discover Your Ideal Tech Career</h1>
+            <p>Answer these 10 questions to find your perfect tech career path</p>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+
+        <form id="assessmentForm" action="/assess" method="POST">
+            <!-- Question 1 -->
+            <div class="question">
+                <h3><i class="fas fa-brain"></i> How do you prefer to solve problems?</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="q1" value="0" class="radio-input" required>
+                        <span class="radio-custom"></span>
+                        Abstract theoretical approaches
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q1" value="1" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Hands-on experimentation
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q1" value="2" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Following established best practices
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q1" value="3" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Creative visual solutions
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q1" value="4" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Data-driven analysis
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question">
+                <h3><i class="fas fa-lightbulb"></i> Which of these excites you most?</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="q2" value="0" class="radio-input" required>
+                        <span class="radio-custom"></span>
+                        Building predictive models
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q2" value="1" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Automating deployment pipelines
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q2" value="2" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Creating user interfaces
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q2" value="3" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Identifying security vulnerabilities
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q2" value="4" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Extracting insights from large datasets
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question">
+                <h3><i class="fas fa-project-diagram"></i> Your favorite type of project involves:</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="q3" value="0" class="radio-input" required>
+                        <span class="radio-custom"></span>
+                        Algorithms and pattern recognition
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q3" value="1" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Infrastructure and scalability
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q3" value="2" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Frontend design and user experience
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q3" value="3" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Security protocols and risk assessment
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q3" value="4" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Data visualization and storytelling
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question">
+                <h3><i class="fas fa-square-root-alt"></i> How do you feel about mathematics?</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="q4" value="0" class="radio-input" required>
+                        <span class="radio-custom"></span>
+                        Love advanced math concepts
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q4" value="1" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Prefer practical applications
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q4" value="2" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Enjoy basic calculations
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q4" value="3" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Like cryptography concepts
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q4" value="4" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Enjoy statistics and probability
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question">
+                <h3><i class="fas fa-building"></i> Your ideal work environment:</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="q5" value="0" class="radio-input" required>
+                        <span class="radio-custom"></span>
+                        Research lab with cutting-edge tech
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q5" value="1" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Fast-paced deployment cycles
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q5" value="2" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Creative collaborative space
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q5" value="3" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Security operations center
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q5" value="4" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Data-rich business environment
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question">
+                <h3><i class="fas fa-tools"></i> Which tool would you rather master?</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="q6" value="0" class="radio-input" required>
+                        <span class="radio-custom"></span>
+                        TensorFlow/PyTorch
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q6" value="1" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Kubernetes/Docker
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q6" value="2" class="radio-input">
+                        <span class="radio-custom"></span>
+                        React/Angular
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q6" value="3" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Wireshark/Metasploit
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q6" value="4" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Pandas/Tableau
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question">
+                <h3><i class="fas fa-puzzle-piece"></i> How do you approach new challenges?</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="q7" value="0" class="radio-input" required>
+                        <span class="radio-custom"></span>
+                        Develop novel solutions
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q7" value="1" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Build robust systems
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q7" value="2" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Create intuitive interfaces
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q7" value="3" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Assess potential risks
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q7" value="4" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Analyze patterns and trends
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question">
+                <h3><i class="fas fa-certificate"></i> Which certification appeals most?</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="q8" value="0" class="radio-input" required>
+                        <span class="radio-custom"></span>
+                        Machine Learning Specialist
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q8" value="1" class="radio-input">
+                        <span class="radio-custom"></span>
+                        AWS Certified DevOps Engineer
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q8" value="2" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Frontend Web Developer
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q8" value="3" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Certified Ethical Hacker
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q8" value="4" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Data Science Professional
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question">
+                <h3><i class="fas fa-star"></i> Your strongest skill is:</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="q9" value="0" class="radio-input" required>
+                        <span class="radio-custom"></span>
+                        Algorithm design
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q9" value="1" class="radio-input">
+                        <span class="radio-custom"></span>
+                        System architecture
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q9" value="2" class="radio-input">
+                        <span class="radio-custom"></span>
+                        UI/UX design
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q9" value="3" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Security analysis
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q9" value="4" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Data wrangling
+                    </label>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question">
+                <h3><i class="fas fa-sync-alt"></i> Favorite part of development cycle:</h3>
+                <div class="radio-group">
+                    <label class="radio-label">
+                        <input type="radio" name="q10" value="0" class="radio-input" required>
+                        <span class="radio-custom"></span>
+                        Model training
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q10" value="1" class="radio-input">
+                        <span class="radio-custom"></span>
+                        CI/CD pipeline
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q10" value="2" class="radio-input">
+                        <span class="radio-custom"></span>
+                        UI implementation
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q10" value="3" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Security testing
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="q10" value="4" class="radio-input">
+                        <span class="radio-custom"></span>
+                        Data preprocessing
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                <span>Get My Results</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Career Recommendation</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Global Styles */
+:root {
+  --primary-dark: #0a192f;
+  --primary: #112240;
+  --primary-light: #1e3a8a;
+  --accent: #64ffda;
+  --text-primary: #e6f1ff;
+  --text-secondary: #a8b2d1;
+  --shadow: rgba(2, 12, 27, 0.7);
+  --gradient-start: #020c1b;
+  --gradient-end: #0a192f;
+  
+  /* Domain specific colors */
+  --aiml-color: #e74c3c;
+  --devops-color: #2980b9;
+  --web-color: #27ae60;
+  --cyber-color: #f1c40f;
+  --data-color: #9b59b6;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  background-color: var(--primary);
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 10px 30px var(--shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(90deg, var(--accent), #4d8cff);
+}
+
+/* Result Card */
+.result-card {
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+  border-radius: 12px;
+  padding: 40px 30px;
+  text-align: center;
+  margin-bottom: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent), #4d8cff);
+}
+
+.domain-icon {
+  font-size: 5rem;
+  margin-bottom: 20px;
+  color: var(--accent);
+  animation: pulse 3s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+}
+
+.result-card h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  background: linear-gradient(90deg, var(--accent), #4d8cff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+.domain-description {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* Roles Section */
+.roles-section {
+  margin: 40px 0;
+}
+
+.roles-section h3 {
+  display: flex;
+  align-items: center;
+  margin-bottom: 25px;
+  font-size: 1.5rem;
+  color: var(--text-primary);
+}
+
+.roles-section h3 i {
+  margin-right: 12px;
+  color: var(--accent);
+}
+
+.roles-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.role-card {
+  background-color: var(--primary-dark);
+  border-radius: 8px;
+  padding: 25px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid var(--accent);
+}
+
+.role-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.role-card h4 {
+  color: var(--accent);
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+}
+
+.role-card p {
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.role-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.skill-tag {
+  background-color: rgba(100, 255, 218, 0.15);
+  color: var(--accent);
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Roadmap Section Styling */
+.roadmap-section {
+  margin: 40px 0;
+  padding: 30px;
+  background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.roadmap-title {
+  color: var(--text-primary);
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1.5rem;
+}
+
+.roadmap-title i {
+  color: var(--accent);
+}
+
+.phase-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  position: relative;
+  padding-left: 40px;
+  margin-left: 20px;
+}
+
+.phase-container::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 4px;
+  height: calc(100% - 20px);
+  background: rgba(100, 255, 218, 0.3);
+  border-radius: 2px;
+}
+
+.phase {
+  background: rgba(30, 58, 138, 0.3);
+  padding: 25px;
+  border-radius: 10px;
+  position: relative;
+  border-left: 4px solid;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.phase:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.phase::before {
+  content: '';
+  position: absolute;
+  left: -42px;
+  top: 25px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--primary-dark);
+  border: 4px solid;
+  z-index: 1;
+}
+
+.phase-title {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+}
+
+.phase-list {
+  list-style-type: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.phase-list li {
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-secondary);
+}
+
+.phase-list li i {
+  color: var(--accent);
+  font-size: 1rem;
+}
+
+/* Domain-specific colors */
+.AIML .phase {
+  border-color: var(--aiml-color);
+}
+
+.AIML .phase::before {
+  border-color: var(--aiml-color);
+}
+
+.DEVOPS .phase {
+  border-color: var(--devops-color);
+}
+
+.DEVOPS .phase::before {
+  border-color: var(--devops-color);
+}
+
+.WEB .phase {
+  border-color: var(--web-color);
+}
+
+.WEB .phase::before {
+  border-color: var(--web-color);
+}
+
+.CYBER .phase {
+  border-color: var(--cyber-color);
+}
+
+.CYBER .phase::before {
+  border-color: var(--cyber-color);
+}
+
+.DATA .phase {
+  border-color: var(--data-color);
+}
+
+.DATA .phase::before {
+  border-color: var(--data-color);
+}
+
+/* Button Container */
+.button-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 40px;
+  justify-content: center;
+}
+
+.retake-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background: linear-gradient(90deg, var(--accent), #4d8cff);
+  border-radius: 8px; 
+  color: var(--primary-dark);
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(100, 255, 218, 0.2);
+}
+
+.retake-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(100, 255, 218, 0.3);
+}
+
+.retake-btn i {
+  margin-right: 8px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .container {
+    padding: 20px;
+  }
+  
+  .result-card {
+    padding: 30px 20px;
+  }
+  
+  .result-card h2 {
+    font-size: 2rem;
+  }
+  
+  .domain-icon {
+    font-size: 4rem;
+  }
+  
+  .roles-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .retake-btn {
+    width: 100%;
+  }
+  
+  .roadmap-section {
+    padding: 20px;
+  }
+  
+  .phase {
+    padding: 20px;
+  }
+}
+
+/* Animation for content */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.result-card,
+.roles-section,
+.roadmap-section {
+  animation: fadeIn 0.5s ease forwards;
+}
+
+.roles-section {
+  animation-delay: 0.2s;
+}
+
+.roadmap-section {
+  animation-delay: 0.4s;
+}
+        /* Add these new styles */
+        .roadmap-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: #073972;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .roadmap-title {
+            color: #94a7b9;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .phase-container {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+            position: relative;
+            padding-left: 30px;
+            margin-left: 15px;
+        }
+
+        .phase-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: #31fcfc;
+            border-radius: 2px;
+        }
+
+        .phase {
+            background: rgb(34, 80, 145);
+            padding: 1.5rem;
+            border-radius: 8px;
+            position: relative;
+            border-left: 4px solid;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .phase::before {
+            content: '';
+            position: absolute;
+            left: -29px;
+            top: 20px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgb(26, 72, 139);
+            border: 4px solid;
+        }
+
+        .phase-title {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            color: #ffffff;
+        }
+
+        .phase-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .phase-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .phase-list li i {
+            color: #3498db;
+        }
+
+        /* Domain-specific colors */
+        .AIML .phase {
+            border-color: #e74c3c;
+        }
+
+        .AIML .phase::before {
+            border-color: #e74c3c;
+        }
+
+        .DEVOPS .phase {
+            border-color: #2980b9;
+        }
+
+        .DEVOPS .phase::before {
+            border-color: #2980b9;
+        }
+
+        .WEB .phase {
+            border-color: #27ae60;
+        }
+
+        .WEB .phase::before {
+            border-color: #27ae60;
+        }
+
+        .CYBER .phase {
+            border-color: #f1c40f;
+        }
+
+        .CYBER .phase::before {
+            border-color: #f1c40f;
+        }
+
+        .DATA .phase {
+            border-color: #9b59b6;
+        }
+
+        .DATA .phase::before {
+            border-color: #9b59b6;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            justify-content: center;
+        }
+
+        .retake-btn {
+            background: #e74c3c;
+        }
+
+        .jobrole {
+            background: #000000;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="result-card">
+            <div class="domain-icon">
+                {% if domain == 'AIML' %}
+                <i class="fas fa-robot"></i>
+                {% elif domain == 'DEVOPS' %}
+                <i class="fas fa-server"></i>
+                {% elif domain == 'WEB' %}
+                <i class="fas fa-code"></i>
+                {% elif domain == 'CYBER' %}
+                <i class="fas fa-shield-alt"></i>
+                {% elif domain == 'DATA' %}
+                <i class="fas fa-chart-bar"></i>
+                {% endif %}
+            </div>
+            <h2>{{ domain }}</h2>
+            <p class="domain-description">{{ domain_description }}</p>
+        </div>
+
+        <div class="roles-section">
+            <h3><i class="fas fa-briefcase"></i> Recommended Roles For You</h3>
+
+            <div class="roles-grid">
+                {% for role in roles %}
+                <div class="role-card">
+                    <h4>{{ role.title }}</h4>
+                    <p>{{ role.description }}</p>
+                    <div class="role-skills">
+                        {% if domain == 'AIML' %}
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">TensorFlow</span>
+                        <span class="skill-tag">ML</span>
+                        {% elif domain == 'DEVOPS' %}
+                        <span class="skill-tag">Docker</span>
+                        <span class="skill-tag">AWS</span>
+                        <span class="skill-tag">CI/CD</span>
+                        {% elif domain == 'WEB' %}
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">React</span>
+                        <span class="skill-tag">CSS</span>
+                        {% elif domain == 'CYBER' %}
+                        <span class="skill-tag">Security</span>
+                        <span class="skill-tag">Networking</span>
+                        <span class="skill-tag">Ethical Hacking</span>
+                        {% elif domain == 'DATA' %}
+                        <span class="skill-tag">Python</span>
+                        <span class="skill-tag">SQL</span>
+                        <span class="skill-tag">Data Analysis</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="roadmap-section">
+            <h3 class="roadmap-title">
+                <i class="fas fa-map-signs"></i>
+                {{ domain }} Career Roadmap
+            </h3>
+
+            <div class="phase-container {{ domain }}">
+                {% if domain == 'AIML' %}
+                <div class="phase">
+                    <h4 class="phase-title">Foundation Phase (3-6 months)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i>Learn Python programming</li>
+                        <li><i class="fas fa-check"></i>Study linear algebra & calculus</li>
+                        <li><i class="fas fa-check"></i>Learn basic statistics</li>
+                        <li><i class="fas fa-check"></i>Introduction to ML concepts</li>
+                    </ul>
+                </div>
+                <div class="phase">
+                    <h4 class="phase-title">Intermediate Phase (6-12 months)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i>Deep learning with TensorFlow/PyTorch</li>
+                        <li><i class="fas fa-check"></i>Computer vision fundamentals</li>
+                        <li><i class="fas fa-check"></i>Natural Language Processing (NLP)</li>
+                        <li><i class="fas fa-check"></i>ML model deployment</li>
+                    </ul>
+                </div>
+                <div class="phase">
+                    <h4 class="phase-title">Advanced Phase (1-2 years)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i>Reinforcement learning</li>
+                        <li><i class="fas fa-check"></i>Advanced neural architectures</li>
+                        <li><i class="fas fa-check"></i>MLOps practices</li>
+                        <li><i class="fas fa-check"></i>Research papers implementation</li>
+                    </ul>
+                </div>
+
+                {% elif domain == 'DEVOPS' %}
+                <!-- Similar phase structure for DEVOPS -->
+                <div class="phase">
+                    <h4 class="phase-title">Foundation Phase (3-6 months)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i> Linux basics & shell scripting</li>
+                        <li><i class="fas fa-check"></i> Version control with Git</li>
+                        <li><i class="fas fa-check"></i> Basic networking concepts</li>
+                        <li><i class="fas fa-check"></i> Introduction to CI/CD</li>
+                    </ul>
+                </div>
+                <div class="phase">
+                    <h4 class="phase-title">Intermediate Phase (6-12 months)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i> Docker & Kubernetes</li>
+                        <li><i class="fas fa-check"></i> Infrastructure as Code (Terraform, Ansible)</li>
+                        <li><i class="fas fa-check"></i> Monitoring & Logging</li>
+                        <li><i class="fas fa-check"></i> Cloud computing (AWS, Azure, GCP)</li>
+                    </ul>
+                </div>
+                <div class="phase">
+                    <h4 class="phase-title">Advanced Phase (1-2 years)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i> Security & compliance automation</li>
+                        <li><i class="fas fa-check"></i> Advanced CI/CD pipeline strategies</li>
+                        <li><i class="fas fa-check"></i> Site reliability engineering (SRE)</li>
+                        <li><i class="fas fa-check"></i> Microservices architecture</li>
+                    </ul>
+                </div>
+                {% elif domain == 'WEB' %}
+                <!-- Similar phase structure for WEB -->
+                <div class="phase">
+                    <h4 class="phase-title">Foundation Phase (3-6 months)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i> HTML, CSS, JavaScript basics</li>
+                        <li><i class="fas fa-check"></i> Responsive design & Bootstrap</li>
+                        <li><i class="fas fa-check"></i> Introduction to Git & GitHub</li>
+                        <li><i class="fas fa-check"></i> Basic DOM manipulation</li>
+                    </ul>
+                </div>
+                {% elif domain == 'CYBER' %}
+                <!-- Similar phase structure for CYBER -->
+                <div class="phase">
+                    <h4 class="phase-title">Foundation Phase (3-6 months)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i> Networking & security fundamentals</li>
+                        <li><i class="fas fa-check"></i> Linux & Windows security</li>
+                        <li><i class="fas fa-check"></i> Cryptography basics</li>
+                        <li><i class="fas fa-check"></i> Introduction to ethical hacking</li>
+                    </ul>
+                </div>
+                <div class="phase">
+                    <h4 class="phase-title">Intermediate Phase (6-12 months)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i> Penetration testing</li>
+                        <li><i class="fas fa-check"></i> Security tools (Wireshark, Metasploit)</li>
+                        <li><i class="fas fa-check"></i> Secure coding practices</li>
+                        <li><i class="fas fa-check"></i> Incident response & forensics</li>
+                    </ul>
+                </div>
+                <div class="phase">
+                    <h4 class="phase-title">Advanced Phase (1-2 years)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i> Threat intelligence & analysis</li>
+                        <li><i class="fas fa-check"></i> Advanced red teaming & blue teaming</li>
+                        <li><i class="fas fa-check"></i> Security automation & AI integration</li>
+                        <li><i class="fas fa-check"></i> Cybersecurity certifications (CISSP, CEH)</li>
+                    </ul>
+                </div>
+                {% elif domain == 'DATA' %}
+                <!-- Similar phase structure for DATA -->
+                <div class="phase">
+                    <h4 class="phase-title">Foundation Phase (3-6 months)</h4>
+                    <ul class="phase-list">
+                        <li><i class="fas fa-check"></i> Python for data analysis</li>
+                        <li><i class="fas fa-check"></i> Statistics & probability</li>
+                        <li><i class="fas fa-check"></i> Data visualization (Matplotlib, Seaborn)</li>
+                        <li><i class="fas fa-check"></i> Introduction to databases (SQL, NoSQL)</li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="button-container">
+            <a href="/" class="retake-btn">
+                <i class="fas fa-redo"></i> Retake Assessment
+            </a>
+            <a href="http://127.0.0.1:3000/dashboard.html" class="retake-btn">
+                <i class="fas fa-lightbulb"></i> Home
+            </a>
+            <a href="/job_role_assessment" class="retake-btn">
+                <i class="fas fa-lightbulb"></i> Know Your Job Role Better
+            </a>
+        </div>
+    </div>
+
+    <script src="/static/script.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Role Assessment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #7e75c2;
+            --secondary: #a66efa;
+            --accent: #ff7675;
+            --dark: #062555;
+            --light: #f8f9fa;
+            --glass: rgba(255, 255, 255, 0.05);
+            --success: #00b894;
+            --danger: #d63031;
+            --warning: #fdcb6e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #00092b 0%, #191464 100%);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .assessment-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(37, 71, 133, 0.1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .assessment-card h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .assessment-card p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 2.5rem;
+        }
+
+        .question-container {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .question-container:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .question-container h3 {
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .option:hover {
+            background: rgba(108, 92, 231, 0.1);
+        }
+
+        .option input[type="radio"] {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary);
+            border-radius: 50%;
+            margin-right: 1rem;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .option input[type="radio"]:checked {
+            background: var(--primary);
+            box-shadow: 0 0 0 3px var(--dark), 0 0 0 6px var(--primary);
+        }
+
+        .option label {
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            flex-grow: 1;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1.2rem 2.5rem;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin: 2rem auto 0;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--light);
+            text-decoration: none;
+            margin-top: 2rem;
+            padding: 0.8rem 1.5rem;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateX(-5px);
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .assessment-card {
+                padding: 1.5rem;
+            }
+
+            .assessment-card h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="assessment-card">
+            <h2><i class="fas fa-tasks"></i> {{ domain }} Job Role Assessment</h2>
+            <p>Answer these scenario-based questions to see how well you match with {{ domain_name }} roles.</p>
+            
+            <form action="/job_role_results" method="POST">
+                {% for i in range(questions|length) %}
+                <div class="question-container">
+                    <h3>Question {{ i+1 }}</h3>
+                    <p>{{ questions[i].question }}</p>
+                    
+                    <div class="options-container">
+                        {% for j in range(questions[i].options|length) %}
+                        <div class="option">
+                            <input type="radio" id="q{{i}}_{{j}}" name="q{{i}}" value="{{j}}" required>
+                            <label for="q{{i}}_{{j}}">{{ questions[i].options[j] }}</label>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+                
+                <button type="submit" class="submit-btn">
+                    <i class="fas fa-paper-plane"></i> Submit Assessment
+                </button>
+            </form>
+        </div>
+        
+        <a href="/results" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Results
+        </a>
+    </div>
+</body>
+</html>
